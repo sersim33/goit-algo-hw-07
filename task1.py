@@ -4,50 +4,28 @@ class Node:
         self.right = None
         self.val = key
 
-    def __str__(self, level=0, prefix="Root: "):
-        ret = "\\t" * level + prefix + str(self.val) + "\\n"
-        if self.left:
-            ret += self.left.__str__(level + 1, "L--- ")
-        if self.right:
-            ret += self.right.__str__(level + 1, "R--- ")
-        return ret
-
-def insert(root, key):
-    if root is None:
-        return Node(key)
-    else:
-        if key < root.val:
-            root.left = insert(root.left, key)
-        else:
-            root.right = insert(root.right, key)
-    return root
-
-def search(root, key):
-    if root is None or root.val == key:
-        return root
-    if key < root.val:
-        return search(root.left, key)
-    return search(root.right, key)
-
-
 def find_max_value(root):
     if root is None:
         return None
     
-    current = root
-    while current.right:
-        current = current.right
+    current_max = root.val
+    left_max = find_max_value(root.left)
+    right_max = find_max_value(root.right)
     
-    return current.val
+    if left_max is not None and left_max > current_max:
+        current_max = left_max
+    if right_max is not None and right_max > current_max:
+        current_max = right_max
+    
+    return current_max
 
+# Приклад створення дерева
 root = Node(11)  
-root = insert(root,22)  
-root = insert(root,5)
-root = insert(root,55)
-root = insert(root,3)
-root = insert(root,12)
+root.left = Node(22)  
+root.right = Node(5)
+root.left.left = Node(55)
+root.left.right = Node(3)
+root.right.left = Node(12)
+
 max_value = find_max_value(root)
-
-
-print(root)
-print("max value is:", max_value)
+print("Найбільше значення в дереві:", max_value)
